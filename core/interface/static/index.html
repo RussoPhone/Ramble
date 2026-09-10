@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gaea — observatório</title><link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<main class="observer-shell">
+  <header id="world-status">
+    <div class="brand-block">
+      <strong class="wordmark">gaea</strong>
+      <span class="header-caption">observatório</span>
+    </div>
+    <div class="status-metrics" aria-live="polite">
+      <span id="world-dimensions"></span>
+      <span id="tick-value">tick 0</span>
+      <span id="population-value"></span>
+    </div>
+    <div class="status-flags">
+      <span id="run-state" data-state="paused">PAUSADA</span>
+      <span id="connection-label" data-state="connecting">conectando</span>
+    </div>
+  </header>
+  <section class="world-stage" aria-label="Mundo">
+    <canvas id="world-canvas" tabindex="0" aria-label="Mundo top-down: arraste para navegar, clique para selecionar"></canvas>
+    <div class="map-tools">
+      <button id="fit-world" title="Enquadrar (0)">enquadrar <kbd>0</kbd></button>
+      <button id="follow-agent" title="Acompanhar (F)" disabled>acompanhar <kbd>F</kbd></button>
+      <label class="collision-control"><input id="show-collisions" type="checkbox"> colisão</label>
+      <label class="collision-control" title="Mostrar o campo de visão do gaiano selecionado"><input id="show-vision" type="checkbox"> visão</label>
+      <form id="seed-form" class="seed-control" title="Gerar um novo mundo (semente vazia = aleatória)">
+        <label for="seed-value">semente</label>
+        <input id="seed-value" type="number" min="0" max="2147483647" step="1" inputmode="numeric" placeholder="aleatória" aria-label="Semente do novo mundo">
+        <button type="submit">gerar mundo</button>
+      </form>
+      <details id="map-key">
+        <summary>chave ASCII</summary>
+        <div class="symbol-key">
+          <p class="section-label">TERRENO</p>
+          <div><canvas data-symbol="terrain:grass"></canvas><span>" <small>grass</small></span></div>
+          <div><canvas data-symbol="terrain:water"></canvas><span>~ <small>water</small></span></div>
+          <div><canvas data-symbol="terrain:stone"></canvas><span># <small>stone</small></span></div>
+          <p class="section-label">OBJETOS</p>
+          <div><canvas data-symbol="object:food"></canvas><span>o <small>food</small></span></div>
+          <div><canvas data-symbol="object:water"></canvas><span>~ <small>water</small></span></div>
+          <div><canvas data-symbol="object:stone"></canvas><span>* <small>stone</small></span></div>
+          <div><canvas data-symbol="object:stack"></canvas><span>& <small>pilha</small></span></div>
+          <p class="section-label">INDIVÍDUOS</p>
+          <div><canvas data-symbol="agent:gaiano"></canvas><span>@ <small>gaiano</small></span></div>
+        </div>
+      </details>
+    </div>
+    <div class="map-caption"><output id="world-hover" aria-live="polite"></output><span id="map-hint">arraste para navegar · roda para aproximar · clique para inspecionar</span></div>
+    <span id="map-scale"></span>
+    <p id="error-banner" role="alert" hidden></p>
+    <aside id="inspector" aria-label="Inspeção contextual" hidden>
+      <header class="inspector-heading">
+        <canvas id="inspector-symbol" aria-hidden="true"></canvas>
+        <div><p class="section-label" data-category></p><h2 data-title></h2></div>
+        <button id="close-inspector" aria-label="Fechar inspeção" title="Fechar (Esc)">×</button>
+      </header>
+      <div class="cell-section">
+        <p class="section-label" id="cell-label">NA CÉLULA</p>
+        <div id="selection-candidates" aria-label="Elementos da célula"></div>
+      </div>
+      <div id="inspector-tabs" role="tablist" aria-label="Inspeção do gaiano" hidden>
+        <button id="tab-summary" role="tab" data-tab="summary" aria-selected="true" aria-controls="inspector-summary">Corpo</button>
+        <button id="tab-memory" role="tab" data-tab="memory" aria-selected="false" aria-controls="history-panel">Memória</button>
+        <button id="tab-log" role="tab" data-tab="log" aria-selected="false" aria-controls="history-panel">Registro</button>
+      </div>
+      <section id="inspector-summary" role="tabpanel" aria-labelledby="tab-summary"><dl data-fields></dl></section>
+      <section id="history-panel" role="tabpanel" hidden>
+        <div class="reading-toolbar"><span id="reading-tick">leitura sob demanda</span><button id="refresh-inspection">atualizar</button></div>
+        <p id="history-status" role="status"></p>
+        <div id="history-content"></div>
+      </section>
+      <footer class="inspector-footnote">Visão do pesquisador · nenhuma ordem é enviada ao gaiano.</footer>
+    </aside>
+  </section>
+  <nav id="time-controls" aria-label="Tempo da simulação">
+    <div class="playback-group">
+      <button id="run-button" title="Executar (Espaço)"><span aria-hidden="true">▶</span> play</button>
+      <button id="pause-button" title="Pausar (Espaço)"><span aria-hidden="true">Ⅱ</span> pause</button>
+      <button id="step-button" title="Um tick (.)"><span aria-hidden="true">›|</span> step</button>
+    </div>
+    <label class="speed-control">ritmo <input id="speed-value" type="number" min="0.1" max="100000" step="0.1" value="20" inputmode="decimal" aria-label="Velocidade em ticks por segundo"><span>ticks/s</span></label>
+    <form id="burst-form"><label for="burst-value">rajada</label><input id="burst-value" aria-label="Ticks na rajada" type="number" min="1" max="1000000" value="100"><span>ticks</span><button>executar</button></form>
+    <span id="remaining-value"></span>
+  </nav>
+</main>
+<script type="module" src="/app.mjs"></script>
+</body>
+</html>

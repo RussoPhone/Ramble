@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+
+# Ambiente virtual
+.venv/
+venv/
+
+# Arquivos locais
+.env
+*.log
+
+# Notas locais
+futuridade.md
+
+#Pastas ignoraveis
+Locale/
+.aider*
+
+# Resultados experimentais locais
+runs/
+*.gaea
+
+# Worktrees locais de desenvolvimento
+.worktrees/
